@@ -675,16 +675,28 @@
     about.appendChild(aboutH);
 
     var p1 = document.createElement('p');
-    p1.textContent = 'This site is built by a trainee, for trainees. Commercial exam preparation courses charge thousands of dollars. This app will never replace those resources or a textbook \u2014 and it is not trying to. Its purpose is to test your knowledge across BPT specialty areas so you can identify your weak spots and focus your study where it matters most.';
+    p1.textContent = 'Built by a trainee, for other trainees. This doesn\u2019t replace the major textbooks or the expensive exam preparation courses \u2014 it isn\u2019t trying to.';
     about.appendChild(p1);
 
     var p2 = document.createElement('p');
-    p2.textContent = 'There are no fees at present. If usage grows, a small contribution (a few dollars) may be introduced in future solely to cover server costs \u2014 not to generate profit. The pool of BPT candidates is small; this is a community resource, not a business.';
+    p2.textContent = 'When I started studying I asked my supervisor where to focus given how wide the curriculum is. The advice: read the index of a major textbook and start with whatever you know nothing about. This app is a modern version of that \u2014 spend a weekend running through short MCQs, find your weak spots (look at the Progress page with the radar chart to see this visually), and build your study plan around them. The real work still has to happen over the following months.';
     about.appendChild(p2);
+
+    var p3 = document.createElement('p');
+    p3.textContent = 'There are no fees. In future this may become a few single-digit dollars to cover server costs \u2014 rather than profit off candidate anxiety. There are only a few hundred exam candidates each year; this is a community resource, not a business.';
+    about.appendChild(p3);
+
+    var p4 = document.createElement('p');
+    p4.textContent = 'Found an error, an ambiguous stem, or a distractor that gives the answer away? Use the Report Error button on any question \u2014 every bit of feedback improves the next version.';
+    about.appendChild(p4);
+
+    var p5 = document.createElement('p');
+    p5.textContent = 'Good luck.';
+    about.appendChild(p5);
 
     var note = document.createElement('div');
     note.className = 'about-note';
-    note.textContent = 'Please ensure your ad blocker is disabled for this site, and allow minimal data tracking (page views and general location). No personal information is collected \u2014 this data simply helps us know whether the site is being used so we can justify maintaining and improving it. Thank you for your support.';
+    note.textContent = 'Please ensure your ad blocker is disabled for this site, and allow minimal data tracking (page views and general location). No personal information is collected \u2014 this simply helps justify maintaining and improving it.';
     about.appendChild(note);
 
     main.appendChild(about);
