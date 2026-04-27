@@ -1638,12 +1638,15 @@
     main.appendChild(intro);
 
     var resources = [
-      { name: 'UpToDate', url: 'https://www.uptodate.com/', domain: 'uptodate.com', desc: 'More valuable than most paid courses combined. If your hospital has access, use it.' },
-      { name: 'Deranged Physiology', url: 'https://derangedphysiology.com/main/home', domain: 'derangedphysiology.com', desc: 'Ridiculously thorough physiology breakdowns. Great for when you need to actually understand the why.' },
-      { name: 'HaemBase', url: 'https://haembase.com/', domain: 'haembase.com', desc: 'Haem in a nutshell. Blood films, coag cascades, malignancies — all in one place.' },
-      { name: 'ESC Guidelines', url: 'https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines', domain: 'escardio.org', desc: 'The cardiology guidelines everyone references. Worth knowing the key ones well.' },
-      { name: 'LITFL ECG Library', url: 'https://litfl.com/ecg-library/', domain: 'litfl.com', desc: 'Best free ECG library going around. Good for pattern recognition practice.' },
-      { name: 'NeuroNotes', url: 'https://neuronotes.net.au/', domain: 'neuronotes.net.au', desc: 'Australian-made neuro reference. Useful for localisation and clinical neuroscience.' }
+      { name: 'UpToDate', url: 'https://www.uptodate.com/', icon: '\uD83D\uDCDA', desc: 'More valuable than most paid courses combined. If your hospital has access, use it.' },
+      { name: 'Deranged Physiology', url: 'https://derangedphysiology.com/main/home', icon: '\uD83E\uDDE0', desc: 'Ridiculously thorough physiology breakdowns. Great for when you need to actually understand the why.' },
+      { name: 'HaemBase', url: 'https://haembase.com/', icon: '\uD83E\uDE78', desc: 'Haem in a nutshell. Blood films, coag cascades, malignancies \u2014 all in one place.' },
+      { name: 'ESC Guidelines', url: 'https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines', icon: '\u2764\uFE0F', desc: 'The cardiology guidelines everyone references. Worth knowing the key ones well.' },
+      { name: 'LITFL ECG Library', url: 'https://litfl.com/ecg-library/', icon: '\uD83D\uDCC8', desc: 'Best free ECG library going around. Good for pattern recognition practice.' },
+      { name: 'NeuroNotes', url: 'https://neuronotes.net.au/', icon: '\uD83E\uDDE0', desc: 'Australian-made neuro reference. Useful for localisation and clinical neuroscience.' },
+      { name: 'The Curbsiders', url: 'https://open.spotify.com/show/3SKlzOLxyztvA1BkJfnf67', icon: '\uD83C\uDFA7', desc: 'Internal medicine podcast. Great for commutes \u2014 makes dense topics stick.' },
+      { name: 'NephMadness', url: 'https://ajkdblog.org/2025/03/01/nephmadness-2025-the-podcrawl/', icon: '\uD83C\uDFC0', desc: 'Annual nephrology bracket-style deep dive. The PodCrawl pulls together episodes from multiple shows.' },
+      { name: 'JAMAevidence', url: 'https://open.spotify.com/show/3fnnsQPN0QMYQSxF2sSkDa', icon: '\uD83D\uDCCB', desc: 'Evidence-based medicine fundamentals straight from JAMA. Good for understanding study design and appraisal.' }
     ];
 
     var grid = document.createElement('div'); grid.className = 'resource-grid';
@@ -1654,11 +1657,9 @@
       card.target = '_blank';
       card.rel = 'noopener noreferrer';
 
-      var icon = document.createElement('img');
+      var icon = document.createElement('span');
       icon.className = 'resource-icon';
-      icon.src = 'https://www.google.com/s2/favicons?domain=' + r.domain + '&sz=64';
-      icon.alt = r.name;
-      icon.onerror = function(){ this.style.display='none'; };
+      icon.textContent = r.icon;
       card.appendChild(icon);
 
       var info = document.createElement('div'); info.className = 'resource-info';
