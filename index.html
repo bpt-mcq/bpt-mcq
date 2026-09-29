@@ -512,6 +512,8 @@
   .spec-summary-stat .stat-val { font-size: 0.92rem; font-weight: 700; }
   .spec-summary-stat .stat-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; }
 
+  @media (hover: none) { .q-keyboard-hint { display: none; } }
+  @media (max-width: 480px) { #nav-info { display: none; } }
   @media (max-width: 580px) {
     nav { padding: 0 14px; }
     .nav-right { gap: 12px; font-size: 0.77rem; }
@@ -529,8 +531,34 @@
     .ach-toast-name { font-size: 0.85rem; }
   }
 </style>
-<script data-goatcounter="https://mcqs.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<script>
+  // GoatCounter analytics — only runs on the live site (local file opens are not counted).
+  // Eli's own devices: open the site once with #me on the end of the address to mark that
+  // device; its visits then count under /bpt-mcq/eli (still included in Totals) and its events
+  // are prefixed "eli-". Open with #notme to remove the mark.
+  (function(){
+    var KEY = 'bptOwner';
+    try {
+      if (location.hash === '#me') { localStorage.setItem(KEY, '1'); history.replaceState(null, '', location.pathname + location.search); }
+      else if (location.hash === '#notme') { localStorage.removeItem(KEY); history.replaceState(null, '', location.pathname + location.search); }
+    } catch(e) {}
+    var owner = false;
+    try { owner = localStorage.getItem(KEY) === '1'; } catch(e) {}
+    window.BPT_OWNER = owner;
+    if (location.hostname !== 'bpt-mcq.github.io') return;
+    window.goatcounter = { no_onload: true, endpoint: 'https://mcqs.goatcounter.com/count' };
+    var gc = document.createElement('script');
+    gc.async = true;
+    gc.src = 'https://gc.zgo.at/count.js';
+    gc.setAttribute('data-goatcounter', 'https://mcqs.goatcounter.com/count');
+    gc.onload = function(){
+      if (!window.goatcounter || !window.goatcounter.count) return;
+      if (owner) window.goatcounter.count({ path: location.pathname.replace(/\/?$/, '/') + 'eli', title: 'Eli (own visits)' });
+      else window.goatcounter.count();
+    };
+    document.head.appendChild(gc);
+  })();
+</script>
 </head>
 <body>
 
@@ -576,6 +604,15 @@
   ];
   var XP_CORRECT = 10;
   var DAILY_GOAL = 10;
+
+  // Anonymous usage events (see GoatCounter snippet in <head>). No-op when analytics isn't loaded.
+  function track(name) {
+    try {
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path: (window.BPT_OWNER ? 'eli-' : '') + name, title: name, event: true });
+      }
+    } catch(e) {}
+  }
 
   var S = loadS();
   var quizState = null;
@@ -713,6 +750,7 @@
     shuffleBtn.addEventListener('click', function(){
       var all = QUESTIONS.slice().sort(function(){ return Math.random()-0.5; });
       quizState = { tag:'all', questions:all, idx:0, selected:null, submitted:false, sessionXP:0, sessionCorrect:0, sessionWrong:[], mode:'random' };
+      track('start-all');
       updateStreak(); saveS();
       showPage('quiz');
     });
@@ -818,6 +856,7 @@
     fbA.target = '_blank';
     fbA.rel = 'noopener noreferrer';
     fbA.textContent = 'Take the Survey';
+    fbA.addEventListener('click', function(){ track('survey-click'); });
     fb.appendChild(fbA);
     main.appendChild(fb);
 
@@ -900,6 +939,7 @@
           e.stopPropagation();
           var qs = QUESTIONS.filter(function(q){ return q.specialty === key; }).slice().sort(function(){ return Math.random()-0.5; });
           quizState = { tag:key, questions:qs, idx:0, selected:null, submitted:false, sessionXP:0, sessionCorrect:0, sessionWrong:[], mode:'random' };
+          track('start-' + key);
           updateStreak(); saveS();
           showPage('quiz');
         });
@@ -1017,6 +1057,7 @@
     }
 
     quizState = { tag:tag, questions:ordered, idx:0, selected:null, submitted:false, sessionXP:0, sessionCorrect:0, sessionWrong:[], mode:mode };
+    if (ordered.length) track('start-' + ordered[0].specialty);
     updateStreak();
     saveS();
     showPage('quiz');
@@ -1187,6 +1228,7 @@
     document.getElementById('submit-btn').disabled = false;
   }
 
+  var answeredThisVisit = 0;
   function submitAns(q) {
     if (!quizState.selected || quizState.submitted) return;
     quizState.submitted = true;
@@ -1195,6 +1237,8 @@
 
     S.answers[q.id] = correct;
     bumpDaily();
+    answeredThisVisit++;
+    if ([10, 25, 50].indexOf(answeredThisVisit) !== -1) track('answered-' + answeredThisVisit);
     if (correct) {
       S.xp += XP_CORRECT;
       quizState.sessionXP += XP_CORRECT;
@@ -1240,6 +1284,7 @@
       + '&entry.304507661=' + encodeURIComponent('Q' + q.id)
       + '&entry.913413518=' + encodeURIComponent(SPECIALTIES[q.specialty] || q.specialty);
     reportBtn.href = formUrl;
+    reportBtn.addEventListener('click', function(){ track('report-error'); });
     box.appendChild(reportBtn);
 
     fbDiv.appendChild(box);
@@ -1915,6 +1960,7 @@
         var okMsg = document.createElement('div');
         okMsg.className = 'email-msg success';
         okMsg.textContent = 'You’re on the list — thanks!';
+        track('email-signup');
         var oldMsg = emailSection.querySelector('.email-msg');
         if (oldMsg) oldMsg.remove();
         emailSection.appendChild(okMsg);
